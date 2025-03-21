@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import {login,signup,logout,getUser,getAllUsers} from "./methods/methods.js"
+import {verifytoken} from "./auth/auth.js"
 
 import dotenv from "dotenv";
 import connectDb from "./connection.js";
@@ -24,7 +25,7 @@ app.use(
   })
 );
 
-export {signup, login, logout,getUser,getAllUsers}
+export {signup, login, logout,getUser,getAllUsers,verifytoken}
 
 app.listen(PORT, () => {
   console.log(`🚀 Auth package server running at port ${PORT}`);

@@ -3,10 +3,10 @@ import User from '../model/model.js';
 
 const jwtkey = "yogesh123";
 
-export const  verifytoken = async (req, res,next) => {
+export const verifytoken = async (req, res,next) => {
    try {
     const token = req.cookies.token;
-    // console.log(token)
+
     if(!token){
         return res.status(401).json({ message: 'Token not found' });
     }
@@ -17,7 +17,7 @@ export const  verifytoken = async (req, res,next) => {
    if(!user){
      return res.status(401).json({ message: 'User is not valid' });
    }
-  //  console.log("user",user)
+
    req.user = user; 
    next()
 

@@ -4,12 +4,10 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-
 const connectDb = async(req,res)=>{
 
 try {
-
- await mongoose.connect("mongodb://127.0.0.1:27017/backend2", {
+    await mongoose.connect("mongodb+srv://yt781703:c9aakPSitHBgIJsn@cluster0.x2rr6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     });
