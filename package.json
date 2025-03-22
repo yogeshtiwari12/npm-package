@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yogeshtiwari12/npm-package.git"
+    "url": "git+https://github.com/yogeshtiwari12/npm-package.git"
   },
   "bugs": {
     "url": "https://github.com/yogeshtiwari12/npm-package/issues"
