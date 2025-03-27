@@ -20,6 +20,6 @@ export const userSchema = new mongoose.Schema({
 });
 
 
-const User = mongoose.model('mydb', userSchema,'mydb2'); // mydb database hai or mydb2 collection hai 
+const User = mongoose.model('User', userSchema); // mydb database hai or mydb2 collection hai 
 
 export default User;

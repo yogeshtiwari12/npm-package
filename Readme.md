@@ -79,4 +79,3 @@ Strong problem-solving abilities with 400+ DSA problems solved.
 
 Active in coding competitions and university tech events.
 Passionate about building scalable and high-performance applications.
-

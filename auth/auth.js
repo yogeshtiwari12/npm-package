@@ -1,30 +1,27 @@
 import jwt from 'jsonwebtoken';
 import User from '../model/model.js';
 
-const jwtkey = "yogesh123";
+const jwtkey = "234567890989765453dfdgfbdv"; 
 
-export const verifytoken = async (req, res,next) => {
+export const verifytoken = async (token) => {
    try {
-    const token = req.cookies.token;
-
+   
     if(!token){
-        return res.status(401).json({ message: 'Token not found' });
+        return { message: 'Token not found' };
     }
    const decoded = jwt.verify(token,jwtkey);
-  //  console.log("decoded",decoded)
 
-   const user = await User.findById(decoded.id);
+   const user = await User.findById(decoded.id).select('-password -__v'); 
    if(!user){
-     return res.status(401).json({ message: 'User is not valid' });
+     return { message: 'User is not valid' };
    }
 
-   req.user = user; 
-   next()
+    return { success:true , user };
 
    } 
    
    catch (error) {
-    return res.status(500).json({ message: 'Authentication failed' }); // Handle errors
+    return { message: 'Authentication failed' ,error}; // Handle errors
    }
 }
 
