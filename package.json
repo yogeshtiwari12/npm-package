@@ -1,6 +1,6 @@
 {
   "name": "authmate-js",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Authentication package with MongoDB, JWT, and bcrypt",
   "main": "index.js",
   "repository": {
