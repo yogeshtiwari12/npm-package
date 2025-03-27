@@ -24,33 +24,46 @@ npm install authmate-js
 ## Usage/Examples
 
 ```javascript
-import { signup, login, logout,getUser,getAllUsers,verifytoken } from "authmate-js";
-
-signup("John Doe", "john@example.com", "securePass123")
-  .then((res) => console.log("Signup Success:", res))
-  .catch((err) => console.error("Signup Error:", err));
-
-login("john@example.com", "securePass123")
-  .then((res) => console.log("Login Success:", res))
-  .catch((err) => console.error("Login Error:", err));
-
-  verifytoken
-  .then((res) => console.log("Verify Token Success:", res))
-
-logout()
-  .then((res) => console.log("Logout Success:", res))
-  .catch((err) => console.error("Logout Error:", err));
-
-getUser()
-  .then((res) => console.log("Get User Success:", res))
-  .catch((err) => console.error("Get User Error:", err));
+import { signup, login, getUser, allusers } from "./index.js";
 
 
-getAllUsers()
-  .then((res) => console.log("Get All Users Success:", res))
-  .catch((err) => console.error("Get All Users Error:", err));
+signup("temp_user", "temp@gmail.com", "12345678")
+    .then((res) => {
+        console.log("Signup Success", res)
+    })
+    .catch((err) => {
+        console.log("Signup Failed", err)
+    })
 
 
+login("temp@gmail.com", "12345678")
+    .then(async (res) => {
+        console.log("Login Success", res);
+        
+    })
+    .catch((err) => {
+        console.log("Login Failed", err);
+    });
+
+
+
+getUser('pass_the_token_here') // Replace with the actual token you get from login
+    .then((res) => {
+        console.log("Get User Success", res)
+    })
+    .catch((err) => {
+        console.log("Get User Failed", err)
+    })
+
+
+
+allusers()
+    .then((res) => {
+        console.log("All Users Success", res)
+    })
+    .catch((err) => {
+        console.log("All Users Failed", err)
+    })
 
 ```
 
