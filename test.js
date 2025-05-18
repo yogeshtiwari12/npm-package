@@ -1,40 +1,41 @@
-import { signup, login, getUser, allusers } from "./index.js";
+import { signup, login, getUser, allusers, logout } from "./index.js";
 
+const email = "3434@gmail.com";
+const name = "Test User";
+const password = "password123";
 
-signup("temp_user", "temp@gmail.com", "12345678")
-    .then((res) => {
-        console.log("Signup Success", res)
+signup(name, email, password)
+    .then(s =>{
+        console.log("Signup result:", s);
     })
-    .catch((err) => {
-        console.log("Signup Failed", err)
-    })
-
-
-login("temp@gmail.com", "12345678")
-    .then(async (res) => {
-        console.log("Login Success", res);
-        
-    })
-    .catch((err) => {
-        console.log("Login Failed", err);
-    });
-
-
-
-getUser('pass_the_token_here') // Replace with the actual token you get from login
-    .then((res) => {
-        console.log("Get User Success", res)
-    })
-    .catch((err) => {
-        console.log("Get User Failed", err)
+    .catch(error => {
+        console.error("Signup failed:", error);
     })
 
 
+    login(email, password)
+    .then(lr => {
+        console.log("Login result:", lr.message)
 
-allusers()
-    .then((res) => {
-        console.log("All Users Success", res)
+        getUser(lr.userId)
+        .then(userResult => {
+            console.log("Get User result:", userResult);
+        })
+        .catch(error => {
+            console.error("Get User failed:", error);
+        })
+
+        })
+        .catch(error =>{
+            console.error("Login failed:", error);  
+        })          
+
+
+   allusers()
+    .then(allUsersResult => {
+        console.log("All Users result:", allUsersResult);
     })
-    .catch((err) => {
-        console.log("All Users Failed", err)
+    .catch(error => {
+        console.error("All Users failed:", error);
     })
+  

@@ -1,22 +1,26 @@
-import { log } from "console"
-import { allusers, getUser,logout } from "./index.js"
+import { getUser, allusers, logout } from "./index.js";
 
+const token = 'YOUR_VALID_TOKEN_HERE';
 
-getUser('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTUyZjdlMGY5MWNjYTViOTBlODA5ZSIsImlhdCI6MTc0MzA5NjIxNiwiZXhwIjoxNzQzMjY5MDE2fQ.7g4oXvNfOZGbo9PXu7xZdhn6uYa7LnMr-ncXUl_bpx4')
+await connectDb();
+  
+  try {
+    const userResult = await getUser(token);
+    console.log("Get User result:", userResult);
+  } catch (error) {
+    console.error("Get User failed:", error);
+  }
 
-    .then((res) => {
-        console.log("Get User Success", res)
-    })
-    .catch((err) => {
-        console.log("Get User Failed", err)
-    })
-
-
-
-allusers()
-    .then((res) => {
-        console.log("All Users Success", res)
-    })
-    .catch((err) => {
-        console.log("All Users Failed", err)
-    })
+  try {
+    const allUsersResult = await allusers();
+    console.log("All Users result:", allUsersResult);
+  } catch (error) {
+    console.error("All Users failed:", error);
+  }
+  
+  try {
+    const logoutResult = await logout(token);
+    console.log("Logout result:", logoutResult);
+  } catch (error) {
+    console.error("Logout failed:", error);
+  };

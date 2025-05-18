@@ -2,12 +2,20 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../model/model.js";
 import dotenv from "dotenv";
-import { verifytoken } from "../index.js";
-
+import { verifytoken } from "../auth/auth.js";
+import connectDb from "../connection.js";
 
 dotenv.config();
 
-const jwtkey = "234567890989765453dfdgfbdv";
+const tokenStore = new Map();
+
+try {
+  await connectDb();
+} catch (error) {
+  console.error("Database connection error:", error);
+}
+
+const jwtSecret = process.env.JWT_SECRET;
 
 export const signup = async (name, email, password) => {
   try {
@@ -26,61 +34,73 @@ export const signup = async (name, email, password) => {
   }
 };
 
-
-
 export const login = async (email, password) => {
   try {
     const user = await User.findOne({ email });
     if (!user) return { error: "User not found" };
-
+    
     const isMatch = await bcryptjs.compare(password, user.password);
     if (!isMatch) return { error: "Invalid credentials" };
 
-    const token = jwt.sign({ id: user._id }, jwtkey, { expiresIn: "2d" });
+    const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: "2d" });
+    tokenStore.set(user._id.toString(), token);
+    const userData = await verifytoken(token);
+    
+    if (!userData.success) {
+      return { error: userData.message || "Authentication failed" };
+    }
 
-  
-    await getUser(token);
-
-    return { message: "Login successful", token };
+    return { 
+      message: "Login successful", 
+      userId: user._id.toString(),
+      user: {
+        name: userData.user.name,
+        email: userData.user.email
+      }
+    };
   } catch (error) {
     return { error: error.message };
   }
 };
 
-
-export const getUser = async (token) => {
+export const getUser = async (userId) => {
   try {
-    if (!token) return { error: "Token is required" };
+    if (!userId) return { error: "User ID is required" };
 
-    const user = await verifytoken(token, jwtkey);
+    const token = tokenStore.get(userId);
+    if (!token) {
+      return { error: "Session expired or invalid. Please login again." };
+    }
+    const result = await verifytoken(token);
     
-    if (!user) {
-      return { error: "User not found or token invalid" };
+    if (!result.success) {
+      tokenStore.delete(userId);
+      return { error: result.message || "User not found or session invalid" };
     }
 
-    return { user };
+    return { user: result.user };
   } catch (error) {
-    console.error("Token verification failed:", error);
+    console.error("User verification failed:", error);
     return { error: "Failed to fetch user", details: error.message };
   }
 };
 
-
-export const logout = async (token) => {
+export const logout = async (userId) => {
   try {
-    if (!token) {
-      return { error: "Token not found" };
+    if (!userId) {
+      return { error: "User ID is required" };
     }
-
-  
-    const cookieHeader = `token=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0`;
-
-    return { message: "Logout successful", clearCookie: cookieHeader };
+    
+    if (!tokenStore.has(userId)) {
+      return { error: "No active session found" };
+    }
+    tokenStore.delete(userId);
+    
+    return { message: "Logout successful" };
   } catch (error) {
     return { error: "Failed to logout", details: error.message || error };
   }
 };
-
 
 export const allusers = async () => {
   try {

@@ -1,7 +1,10 @@
 import jwt from 'jsonwebtoken';
 import User from '../model/model.js';
+import dotenv from 'dotenv';
 
-const jwtkey = "234567890989765453dfdgfbdv"; 
+dotenv.config();
+
+const jwtSecret = process.env.JWT_SECRET;
 
 export const verifytoken = async (token) => {
    try {
@@ -9,7 +12,7 @@ export const verifytoken = async (token) => {
     if(!token){
         return { message: 'Token not found' };
     }
-   const decoded = jwt.verify(token,jwtkey);
+   const decoded = jwt.verify(token, jwtSecret);
 
    const user = await User.findById(decoded.id).select('-password -__v'); 
    if(!user){
