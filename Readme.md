@@ -77,58 +77,7 @@ console.log(logoutResult);
 // { message: "Logout successful", clearCookie: "token=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0" }
 ```
 
-### Integration with Express.js
 
-```javascript
-import express from 'express';
-import cookieParser from 'cookie-parser';
-import { signup, login, logout, getUser, connectDb } from 'authmate-js';
-
-const app = express();
-app.use(express.json());
-app.use(cookieParser());
-
-// Connect to database
-connectDb();
-
-app.post('/signup', async (req, res) => {
-    
-app.get('/user', async (req, res) => {
-  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
-  const result = await getUser(token);
-  
-  if (result.error) {
-    return res.status(401).json({ error: result.error });
-  }
-  
-  res.status(200).json(result);
-});
-
-app.post('/logout', async (req, res) => {
-  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
-  const result = await logout(token);
-  
-  if (result.error) {
-    return res.status(400).json({ error: result.error });
-  }
-  
-  res.clearCookie("token");
-  res.status(200).json(result);
-});
-
-app.listen(3000, () => console.log('Server running on port 3000'));
-```
-
-## 📚 API Reference
-
-### connectDb()
-
-Connects to the MongoDB database using the `MONGO_URI` from environment variables.
-
-```javascript
-const connected = await connectDb();
-// Returns true if connection is successful, false otherwise
-```
 
 ### signup(name, email, password)
 
