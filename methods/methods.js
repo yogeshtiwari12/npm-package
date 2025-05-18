@@ -15,7 +15,7 @@ try {
   console.error("Database connection error:", error);
 }
 
-const jwtSecret = process.env.JWT_SECRET;
+const jwtSecret = "abjhgfhgjklkjghjhgbnlkjbhvncnbnm,bmvnbbnm";
 
 export const signup = async (name, email, password) => {
   try {
