@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const jwtSecret = process.env.JWT_SECRET;
+const jwtSecret = "abjhgfhgjklkjghjhgbnlkjbhvncnbnm,bmvnbbnm";
 
 export const verifytoken = async (token) => {
    try {
