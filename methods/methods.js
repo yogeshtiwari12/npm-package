@@ -4,10 +4,10 @@ import User from "../model/model.js";
 import dotenv from "dotenv";
 import { verifytoken } from "../auth/auth.js";
 import connectDb from "../connection.js";
+import redish from "../redish/redish.js";
 
 dotenv.config();
 
-const tokenStore = new Map();
 
 try {
   await connectDb();
@@ -38,20 +38,21 @@ export const login = async (email, password) => {
   try {
     const user = await User.findOne({ email });
     if (!user) return { error: "User not found" };
-    
+
     const isMatch = await bcryptjs.compare(password, user.password);
     if (!isMatch) return { error: "Invalid credentials" };
 
     const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: "2d" });
-    tokenStore.set(user._id.toString(), token);
+    await redish.set(`${user._id}`, token)
     const userData = await verifytoken(token);
-    
+
     if (!userData.success) {
       return { error: userData.message || "Authentication failed" };
     }
 
-    return { 
-      message: "Login successful", 
+    return {
+      message: "Login successful",
+
       userId: user._id.toString(),
       user: {
         name: userData.user.name,
@@ -67,14 +68,14 @@ export const getUser = async (userId) => {
   try {
     if (!userId) return { error: "User ID is required" };
 
-    const token = tokenStore.get(userId);
+    const token = await redish.get(userId);
     if (!token) {
       return { error: "Session expired or invalid. Please login again." };
     }
     const result = await verifytoken(token);
-    
+
     if (!result.success) {
-      tokenStore.delete(userId);
+      await redish.del("useid")
       return { error: result.message || "User not found or session invalid" };
     }
 
@@ -90,12 +91,12 @@ export const logout = async (userId) => {
     if (!userId) {
       return { error: "User ID is required" };
     }
-    
-    if (!tokenStore.has(userId)) {
+    const token = redish.get("useid")
+
+    if (!token) {
       return { error: "No active session found" };
     }
-    tokenStore.delete(userId);
-    
+    await redish.del("useid")
     return { message: "Logout successful" };
   } catch (error) {
     return { error: "Failed to logout", details: error.message || error };
