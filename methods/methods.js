@@ -4,7 +4,7 @@ import User from "../model/model.js";
 import { verifytoken } from "../index.js";
 
 
-const jwtkey = "abjhgfhgjklkjghjhgbnlkjbhvncnbnm,bmvnbbnm";
+const jwtkey = "yogesh12345sGDSDSs";
 
 export const signup = async (name, email, password) => {
   try {
