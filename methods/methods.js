@@ -4,7 +4,7 @@ import User from "../model/model.js";
 import { verifytoken } from "../index.js";
 
 
-const jwtkey = "234567890989765453dfdgfbdv";
+const jwtkey = "abjhgfhgjklkjghjhgbnlkjbhvncnbnm,bmvnbbnm";
 
 export const signup = async (name, email, password) => {
   try {
@@ -52,6 +52,7 @@ export const getUser = async (token) => {
     if (!token) return { error: "Token is required" };
 
     const user = await verifytoken(token, jwtkey);
+    // console.log("Verified user:", user);
     
     if (!user) {
       return { error: "User not found or token invalid" };

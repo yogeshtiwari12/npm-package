@@ -1,8 +1,5 @@
 import jwt from 'jsonwebtoken';
 import User from '../model/model.js';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const jwtSecret = "abjhgfhgjklkjghjhgbnlkjbhvncnbnm,bmvnbbnm";
 
@@ -19,12 +16,13 @@ export const verifytoken = async (token) => {
      return { message: 'User is not valid' };
    }
 
+     console.log(user)
     return { success:true , user };
 
    } 
    
    catch (error) {
-    return { message: 'Authentication failed' ,error}; // Handle errors
+    return { message: 'Authentication failed' ,error}; 
    }
 }
 
