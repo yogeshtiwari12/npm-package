@@ -1,11 +1,8 @@
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../model/model.js";
-import dotenv from "dotenv";
 import { verifytoken } from "../index.js";
 
-
-dotenv.config();
 
 const jwtkey = "234567890989765453dfdgfbdv";
 
